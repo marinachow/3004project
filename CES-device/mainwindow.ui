@@ -53,7 +53,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="batteryLabel">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -62,11 +62,14 @@
       <height>17</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
     <property name="text">
      <string>Battery level:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QLabel" name="timerTotalLabel">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -92,7 +95,7 @@
      <number>100</number>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="timeLeftLabel">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -118,7 +121,7 @@
      <number>24</number>
     </property>
    </widget>
-   <widget class="QLabel" name="label_4">
+   <widget class="QLabel" name="IntensityLabel">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -289,6 +292,42 @@ p, li { white-space: pre-wrap; }
       <y>90</y>
       <width>72</width>
       <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="onButton">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>30</y>
+      <width>41</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ON</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="offButton">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>30</y>
+      <width>51</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OFF</string>
+    </property>
+   </widget>
+   <widget class="QGraphicsView" name="offBlock">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>70</y>
+      <width>191</width>
+      <height>192</height>
      </rect>
     </property>
    </widget>
