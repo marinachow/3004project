@@ -89,43 +89,37 @@ void MainWindow::changeTime() {
     }
 }
 
-void MainWindow::lessIntense(){
-    if (intensity == 1) {
-        intensity = 0;
+void MainWindow::lessIntense() {
+    intensity -= 1;
+    ui->adminCurrent->setCurrentIndex(intensity);
+    if (intensity == 0) {
         ui->intensity->setValue(0);
         ui->lessButton->setEnabled(false);
-    } else if (intensity == 2) {
-        intensity = 1;
+    } else if (intensity == 1) {
         ui->intensity->setValue(20);
-    } else if (intensity == 3) {
-        intensity = 2;
+    } else if (intensity == 2) {
         ui->intensity->setValue(40);
-    } else if (intensity == 4) {
-        intensity = 3;
+    } else if (intensity == 3) {
         ui->intensity->setValue(60);
-    } else if (intensity == 5) {
-        intensity = 4;
+    } else if (intensity == 4) {
         ui->intensity->setValue(80);
         ui->moreButton->setEnabled(true);
     }
 }
 
 void MainWindow::moreIntense() {
-    if (intensity == 0) {
-        intensity = 1;
+    intensity += 1;
+    ui->adminCurrent->setCurrentIndex(intensity);
+    if (intensity == 1) {
         ui->intensity->setValue(20);
         ui->lessButton->setEnabled(true);
-    } else if (intensity == 1) {
-        intensity = 2;
-        ui->intensity->setValue(40);
     } else if (intensity == 2) {
-        intensity = 3;
-        ui->intensity->setValue(60);
+        ui->intensity->setValue(40);
     } else if (intensity == 3) {
-        intensity = 4;
-        ui->intensity->setValue(80);
+        ui->intensity->setValue(60);
     } else if (intensity == 4) {
-        intensity = 5;
+        ui->intensity->setValue(80);
+    } else if (intensity == 5) {
         ui->intensity->setValue(100);
         ui->moreButton->setEnabled(false);
     }
@@ -140,9 +134,16 @@ void MainWindow::applyToSkin(int app) {
 }
 
 void MainWindow::adminChangeCurrent(int curr) {
-    if (curr == 0)
+    intensity = curr;
+    if (curr == 0) {
         ui->intensity->setValue(0);
-    else if (curr == 1)
+        ui->lessButton->setEnabled(false);
+    }
+    if (curr < 5)
+        ui->moreButton->setEnabled(true);
+    if (curr > 0)
+        ui->lessButton->setEnabled(true);
+    if (curr == 1)
         ui->intensity->setValue(20);
     else if (curr == 2)
         ui->intensity->setValue(40);
@@ -150,9 +151,10 @@ void MainWindow::adminChangeCurrent(int curr) {
         ui->intensity->setValue(60);
     else if (curr == 4)
         ui->intensity->setValue(80);
-    else if (curr == 5)
+    else if (curr == 5) {
         ui->intensity->setValue(100);
-    else {
+        ui->moreButton->setEnabled(false);
+    } else if (curr == 6) {
         ui->offBlock->show();
         ui->adminOffBlock->show();
         ui->offButton->setEnabled(false);
