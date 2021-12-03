@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDebug>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,5 +22,6 @@ private:
 private slots:
     void turnOn();
     void turnOff();
+    void adminChangeCurrent(int curr);
 };
 #endif // MAINWINDOW_H
