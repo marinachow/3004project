@@ -58,7 +58,10 @@ void MainWindow::turnOn() {
     ui->offButton->setEnabled(true);
     ui->onButton->setEnabled(false);
     ui->changeTimeButton->setEnabled(true);
-    ui->moreButton->setEnabled(true);
+    if (intensity < 5)
+        ui->moreButton->setEnabled(true);
+    if (intensity > 0)
+        ui->lessButton->setEnabled(true);
     ui->lockButton->setEnabled(true);
 }
 
