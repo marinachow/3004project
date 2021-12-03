@@ -130,6 +130,19 @@ void MainWindow::moreIntense() {
 
 void MainWindow::adminChangeBattery(int batt) {
     ui->battery->setValue(batt);
+    if (batt == 5)
+        qInfo("Warning low battery: 5%");
+    else if (batt == 2) {
+        qInfo("Battery dead... Shutting down");
+        ui->offBlock->show();
+        ui->adminOffBlock->show();
+        ui->offButton->setEnabled(false);
+        ui->onButton->setEnabled(false);
+        ui->changeTimeButton->setEnabled(false);
+        ui->moreButton->setEnabled(false);
+        ui->lessButton->setEnabled(false);
+        ui->lockButton->setEnabled(false);
+    }
 }
 
 void MainWindow::applyToSkin(int app) {
