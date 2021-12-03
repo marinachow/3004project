@@ -66,7 +66,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 600);
+        MainWindow->resize(647, 478);
         MainWindow->setStyleSheet(QString::fromUtf8(""));
         cesWidget = new QWidget(MainWindow);
         cesWidget->setObjectName(QString::fromUtf8("cesWidget"));
@@ -98,7 +98,7 @@ public:
         intensity = new QProgressBar(cesWidget);
         intensity->setObjectName(QString::fromUtf8("intensity"));
         intensity->setGeometry(QRect(100, 230, 171, 23));
-        intensity->setValue(24);
+        intensity->setValue(0);
         intensity->setTextVisible(false);
         IntensityLabel = new QLabel(cesWidget);
         IntensityLabel->setObjectName(QString::fromUtf8("IntensityLabel"));
@@ -117,14 +117,15 @@ public:
         lockButton->setGeometry(QRect(150, 340, 61, 25));
         label_5 = new QLabel(cesWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(150, 410, 81, 17));
-        label_6 = new QLabel(cesWidget);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(370, 20, 54, 17));
+        label_5->setGeometry(QRect(130, 410, 91, 17));
         QFont font;
         font.setFamily(QString::fromUtf8("Noto Sans Adlam"));
         font.setBold(true);
         font.setWeight(75);
+        label_5->setFont(font);
+        label_6 = new QLabel(cesWidget);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_6->setGeometry(QRect(370, 20, 54, 17));
         label_6->setFont(font);
         label_7 = new QLabel(cesWidget);
         label_7->setObjectName(QString::fromUtf8("label_7"));
@@ -164,6 +165,7 @@ public:
         adminOffBlock = new QGraphicsView(cesWidget);
         adminOffBlock->setObjectName(QString::fromUtf8("adminOffBlock"));
         adminOffBlock->setGeometry(QRect(360, 40, 256, 261));
+        adminOffBlock->setFrameShape(QFrame::NoFrame);
         textEdit = new QTextEdit(cesWidget);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
         textEdit->setGeometry(QRect(100, 210, 171, 31));
