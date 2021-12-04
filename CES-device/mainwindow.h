@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include <QTime>
+#include <QTimer>
+#include <clock.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,10 +18,18 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void doCountDownTick();
+
 private:
     Ui::MainWindow *ui;
     int time;
     int intensity;
+    QTimer *timer;
+    Clock *clock;
+    bool running;
+    bool onSkin;
+    int dc;
 
 private slots:
     void turnOn();
