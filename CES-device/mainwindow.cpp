@@ -157,7 +157,7 @@ void MainWindow::moreIntense() {
 
 void MainWindow::adminChangeBattery(int batt) {
     ui->battery->setValue(batt);
-    if (batt <= 5 )
+    if (batt <= 5 & batt <= 3)
         qInfo("Warning low battery: 5%");
     else if (batt <= 2) {
         qInfo("Battery dead... Shutting down");
@@ -246,7 +246,7 @@ void MainWindow::useDevice(){
 //        timer->stop();
 //        return;
     }else{
-        adminChangeBattery(ui->battery->value()-5);
+        adminChangeBattery(ui->battery->value()-3);
         qInfo("Treatment running");
         time -= 5;
         QString newTime = QString::number(time);
