@@ -6,6 +6,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
+    clock = new Clock();
+    timer = new QTimer(this);
+    running = false;
+
     //initialize decive to off
     ui->offButton->setEnabled(false);
     ui->changeTimeButton->setEnabled(false);
@@ -18,9 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     intensity = 0;
     onSkin = false;
     dc = 0;
-    clock = new Clock();
-    timer = new QTimer(this);
-    running = false;
 
     //populate drop down menus
     ui->skin->insertItem(0,"FALSE");
@@ -51,10 +52,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->adminFreq, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeFreq(int)));
     connect(ui->adminTimerTotal, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeTimerTotal(int)));
     connect(ui->resetButton, SIGNAL(released()), this, SLOT (reset()));
+    connect(timer, SIGNAL(timeout()), this, SLOT (doCountDownTick()));
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+    delete clock;
 }
 
 void MainWindow::turnOn() {
@@ -187,7 +190,6 @@ void MainWindow::applyToSkin(int app) {
     else{
         onSkin = false;
     }
-
 }
 
 void MainWindow::adminChangeCurrent(int curr) {
@@ -245,7 +247,6 @@ void MainWindow::adminChangeTimerTotal(int total) {
         }
         clock->setTime(time);
     }
-
 }
 
 void MainWindow::reset() {
