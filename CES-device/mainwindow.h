@@ -43,9 +43,9 @@ private slots:
     void adminChangeBattery(int batt);
     void applyToSkin(int app);
     void adminChangeCurrent(int curr);
-    //void adminChangeFreq(int freq);
+    void adminChangeFreq(int freq);
     void adminChangeTimerTotal(int total);
-    //void adminChangeWaveform(int wave);
-    //void drainBattery();
+    void adminChangeWaveform(int wave);
+    void drainBattery();
 };
 #endif // MAINWINDOW_H
