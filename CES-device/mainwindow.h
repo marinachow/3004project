@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QDebug>
+#include <QTimer>
+#include <string>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,10 +20,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QTimer *timer;
     int time;
     int intensity;
 
 private slots:
+    void useDevice();
     void turnOn();
     void turnOff();
     void changeTime();
