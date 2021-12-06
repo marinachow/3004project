@@ -26,13 +26,13 @@ private:
     int time;
     int intensity;
     QTimer *timer;
-    //QTimer *timer2;
+    QTimer *timer2;
     Clock *clock;
     bool running;
     bool onSkin;
     int dc;
-//    int waveform;
-//    int frequency;
+    int waveform;
+    int frequency;
 
 private slots:
     void turnOn();
