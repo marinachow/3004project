@@ -240,32 +240,33 @@ void MainWindow::adminChangeTimerTotal(int total) {
 void MainWindow::useDevice(){
 
     if(intensity==0){
-        qInfo("Increase intensity to start the process.");
-        timer->stop();
-        return;
-    }
-
-    if(intensity==1){
         adminChangeBattery(ui->battery->value()-1);
 
-    }else if(intensity==2){
-        adminChangeBattery(ui->battery->value()-2);
-
-    }else if(intensity==3){
-        adminChangeBattery(ui->battery->value()-3);
-
-    }else if(intensity==4){
-        adminChangeBattery(ui->battery->value()-4);
-
-    }else if(intensity==5){
+//        qInfo("Increase intensity to start the process.");
+//        timer->stop();
+//        return;
+    }else{
         adminChangeBattery(ui->battery->value()-5);
+        qInfo("Treatment running");
+        time -= 5;
+        QString newTime = QString::number(time);
+        ui->timeLeft->setPlainText(newTime + ":00");
 
     }
+//       else if(intensity==2){
+//        adminChangeBattery(ui->battery->value()-2);
 
-    qInfo("Treatment running");
-    time -= 5;
-    QString newTime = QString::number(time);
-    ui->timeLeft->setPlainText(newTime + ":00");
+//    }else if(intensity==3){
+//        adminChangeBattery(ui->battery->value()-3);
+
+//    }else if(intensity==4){
+//        adminChangeBattery(ui->battery->value()-4);
+
+//    }else if(intensity==5){
+//        adminChangeBattery(ui->battery->value()-5);
+
+//    }
+
 
     if(time<=0){
         timer->stop();
