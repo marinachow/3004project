@@ -90,14 +90,17 @@ void MainWindow::changeTime() {
             time = 40;
             ui->timerTotal->setPlainText("40");
             ui->timeLeft->setPlainText("40:00");
+            ui->adminTimerTotal->setCurrentIndex(1);
         } else if (time == 40) {
             time = 60;
             ui->timerTotal->setPlainText("60");
             ui->timeLeft->setPlainText("60:00");
+            ui->adminTimerTotal->setCurrentIndex(2);
         } else if (time == 60) {
             time = 20;
             ui->timerTotal->setPlainText("20");
             ui->timeLeft->setPlainText("20:00");
+            ui->adminTimerTotal->setCurrentIndex(0);
         }
         clock->setTime(time);
     }
