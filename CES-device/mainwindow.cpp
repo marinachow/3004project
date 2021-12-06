@@ -157,7 +157,7 @@ void MainWindow::moreIntense() {
 
 void MainWindow::adminChangeBattery(int batt) {
     ui->battery->setValue(batt);
-    if (batt <= 5 & batt <= 3)
+    if (batt <= 5 & batt >= 3)
         qInfo("Warning low battery: 5%");
     else if (batt <= 2) {
         qInfo("Battery dead... Shutting down");
