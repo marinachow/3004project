@@ -23,7 +23,6 @@ SOURCES += \
 HEADERS += \
     clock.h \
     mainwindow.h \
-    menu.h
 
 FORMS += \
     mainwindow.ui

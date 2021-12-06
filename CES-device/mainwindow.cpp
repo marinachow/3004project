@@ -16,6 +16,11 @@ MainWindow::MainWindow(QWidget *parent)
     //initialize variables
     time = 20;
     intensity = 0;
+    onSkin = false;
+    dc = 0;
+    clock = new Clock();
+    timer = new QTimer(this);
+    running = false;
 
     //populate drop down menus
     ui->skin->insertItem(0,"FALSE");
@@ -77,21 +82,24 @@ void MainWindow::turnOff() {
 }
 
 void MainWindow::changeTime() {
-    if (time == 20) {
-        time = 40;
-        ui->timerTotal->setPlainText("40");
-        ui->timeLeft->setPlainText("40:00");
-        ui->adminTimerTotal->setCurrentIndex(1);
-    } else if (time == 40) {
-        time = 60;
-        ui->timerTotal->setPlainText("60");
-        ui->timeLeft->setPlainText("60:00");
-        ui->adminTimerTotal->setCurrentIndex(2);
-    } else if (time == 60) {
-        time = 20;
-        ui->timerTotal->setPlainText("20");
-        ui->timeLeft->setPlainText("20:00");
-        ui->adminTimerTotal->setCurrentIndex(0);
+    if(!running){
+        if (time == 20) {
+            time = 40;
+            ui->timerTotal->setPlainText("40");
+            ui->timeLeft->setPlainText("40:00");
+            ui->adminTimerTotal->setCurrentIndex(1);
+        } else if (time == 40) {
+            time = 60;
+            ui->timerTotal->setPlainText("60");
+            ui->timeLeft->setPlainText("60:00");
+            ui->adminTimerTotal->setCurrentIndex(2);
+        } else if (time == 60) {
+            time = 20;
+            ui->timerTotal->setPlainText("20");
+            ui->timeLeft->setPlainText("20:00");
+            ui->adminTimerTotal->setCurrentIndex(0);
+        }
+        clock->setTime(time);
     }
 }
 
@@ -131,6 +139,23 @@ void MainWindow::moreIntense() {
     }
 }
 
+void MainWindow::doCountDownTick(){
+    clock->countdown();
+    QTime timeDisplayVal(0, clock->getMinutes(), clock->getSeconds());
+    ui->timeLeft->setPlainText(timeDisplayVal.toString("mm:ss"));
+    if(!onSkin){
+        dc++;
+    }
+    if(clock->isFinished() || dc >= 5){
+        timer->stop();
+        clock->setTime(time);
+        running = false;
+        QTime timeDisplayRset(0, clock->getMinutes(), clock->getSeconds());
+        ui->timeLeft->setPlainText(timeDisplayRset.toString("mm:ss"));
+        dc = 0;
+    }
+}
+
 void MainWindow::adminChangeBattery(int batt) {
     ui->battery->setValue(batt);
     if (batt == 5)
@@ -149,6 +174,19 @@ void MainWindow::adminChangeBattery(int batt) {
 }
 
 void MainWindow::applyToSkin(int app) {
+    if(app && !running){
+        dc = 0;
+        running = true;
+        onSkin = true;
+        timer->start(1000);
+    }
+    else if(app && running){
+        onSkin = true;
+        dc = 0;
+    }
+    else{
+        onSkin = false;
+    }
 
 }
 
@@ -191,18 +229,21 @@ void MainWindow::adminChangeFreq(int freq) {
 }
 
 void MainWindow::adminChangeTimerTotal(int total) {
-    if (total == 0) {
-        time = 20;
-        ui->timerTotal->setPlainText("20");
-        ui->timeLeft->setPlainText("20:00");
-    } else if (total == 1) {
-        time = 40;
-        ui->timerTotal->setPlainText("40");
-        ui->timeLeft->setPlainText("40:00");
-    } else {
-        time = 60;
-        ui->timerTotal->setPlainText("60");
-        ui->timeLeft->setPlainText("60:00");
+    if(!running){
+        if (total == 0) {
+            time = 20;
+            ui->timerTotal->setPlainText("20");
+            ui->timeLeft->setPlainText("20:00");
+        } else if (total == 1) {
+            time = 40;
+            ui->timerTotal->setPlainText("40");
+            ui->timeLeft->setPlainText("40:00");
+        } else {
+            time = 60;
+            ui->timerTotal->setPlainText("60");
+            ui->timeLeft->setPlainText("60:00");
+        }
+        clock->setTime(time);
     }
 
 }
