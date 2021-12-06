@@ -26,10 +26,13 @@ private:
     int time;
     int intensity;
     QTimer *timer;
+    //QTimer *timer2;
     Clock *clock;
     bool running;
     bool onSkin;
     int dc;
+//    int waveform;
+//    int frequency;
 
 private slots:
     void turnOn();
@@ -40,7 +43,9 @@ private slots:
     void adminChangeBattery(int batt);
     void applyToSkin(int app);
     void adminChangeCurrent(int curr);
-    void adminChangeFreq(int freq);
+    //void adminChangeFreq(int freq);
     void adminChangeTimerTotal(int total);
+    //void adminChangeWaveform(int wave);
+    //void drainBattery();
 };
 #endif // MAINWINDOW_H
