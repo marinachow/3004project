@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
-    ui->skinContact->hide();
+    ui->skinContactOn->hide();
 
     //initialize variables
     time = 20;
@@ -40,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->adminTimerTotal->insertItem(0,"20");
     ui->adminTimerTotal->insertItem(1,"40");
     ui->adminTimerTotal->insertItem(2,"60");
+    ui->waveForm->insertItem(0,"Alpha");
+    ui->waveForm->insertItem(1,"Betta");
+    ui->waveForm->insertItem(2,"Gamma");
 
     //slots
     connect(ui->onButton, SIGNAL(released()), this, SLOT (turnOn()));
@@ -52,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->adminCurrent, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeCurrent(int)));
     connect(ui->adminFreq, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeFreq(int)));
     connect(ui->adminTimerTotal, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeTimerTotal(int)));
-    connect(ui->resetButton, SIGNAL(released()), this, SLOT (reset()));
     connect(timer, SIGNAL(timeout()), this, SLOT (doCountDownTick()));
 }
 
@@ -182,17 +184,20 @@ void MainWindow::applyToSkin(int app) {
         dc = 0;
         running = true;
         onSkin = true;
-        ui->skinContact->show();
+        ui->skinContactOn->show();
+        ui->skinContactOff->hide();
         timer->start(1000);
     }
     else if(app && running){
         onSkin = true;
-        ui->skinContact->show();
+        ui->skinContactOn->show();
+        ui->skinContactOff->hide();
         dc = 0;
     }
     else{
         onSkin = false;
-        ui->skinContact->hide();
+        ui->skinContactOn->hide();
+        ui->skinContactOff->show();
     }
 }
 
@@ -253,6 +258,3 @@ void MainWindow::adminChangeTimerTotal(int total) {
     }
 }
 
-void MainWindow::reset() {
-
-}

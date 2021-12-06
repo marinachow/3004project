@@ -58,10 +58,13 @@ public:
     QTextEdit *textEdit;
     QTextBrowser *timerTotal;
     QTextBrowser *timeLeft;
-    QPushButton *resetButton;
     QComboBox *adminTimerTotal;
     QLabel *label_3;
-    QLabel *skinContact;
+    QLabel *skinContactOn;
+    QLabel *label_4;
+    QLabel *skinContactOff;
+    QLabel *label_9;
+    QComboBox *waveForm;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -165,7 +168,7 @@ public:
         adminFreq->setGeometry(QRect(440, 160, 72, 25));
         adminOffBlock = new QGraphicsView(cesWidget);
         adminOffBlock->setObjectName(QString::fromUtf8("adminOffBlock"));
-        adminOffBlock->setGeometry(QRect(360, 40, 256, 261));
+        adminOffBlock->setGeometry(QRect(360, 50, 256, 261));
         adminOffBlock->setFrameShape(QFrame::NoFrame);
         textEdit = new QTextEdit(cesWidget);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
@@ -179,18 +182,27 @@ public:
         timeLeft->setObjectName(QString::fromUtf8("timeLeft"));
         timeLeft->setGeometry(QRect(160, 180, 71, 31));
         timeLeft->setFrameShape(QFrame::NoFrame);
-        resetButton = new QPushButton(cesWidget);
-        resetButton->setObjectName(QString::fromUtf8("resetButton"));
-        resetButton->setGeometry(QRect(400, 260, 80, 25));
         adminTimerTotal = new QComboBox(cesWidget);
         adminTimerTotal->setObjectName(QString::fromUtf8("adminTimerTotal"));
-        adminTimerTotal->setGeometry(QRect(450, 200, 72, 25));
+        adminTimerTotal->setGeometry(QRect(440, 230, 72, 25));
         label_3 = new QLabel(cesWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(370, 200, 61, 17));
-        skinContact = new QLabel(cesWidget);
-        skinContact->setObjectName(QString::fromUtf8("skinContact"));
-        skinContact->setGeometry(QRect(180, 70, 91, 20));
+        label_3->setGeometry(QRect(370, 230, 61, 17));
+        skinContactOn = new QLabel(cesWidget);
+        skinContactOn->setObjectName(QString::fromUtf8("skinContactOn"));
+        skinContactOn->setGeometry(QRect(180, 70, 31, 20));
+        label_4 = new QLabel(cesWidget);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(100, 70, 81, 20));
+        skinContactOff = new QLabel(cesWidget);
+        skinContactOff->setObjectName(QString::fromUtf8("skinContactOff"));
+        skinContactOff->setGeometry(QRect(180, 70, 54, 17));
+        label_9 = new QLabel(cesWidget);
+        label_9->setObjectName(QString::fromUtf8("label_9"));
+        label_9->setGeometry(QRect(370, 190, 61, 17));
+        waveForm = new QComboBox(cesWidget);
+        waveForm->setObjectName(QString::fromUtf8("waveForm"));
+        waveForm->setGeometry(QRect(440, 190, 72, 25));
         MainWindow->setCentralWidget(cesWidget);
         graphicsView->raise();
         graphicsView_2->raise();
@@ -220,12 +232,15 @@ public:
         intensity->raise();
         timerTotal->raise();
         timeLeft->raise();
-        resetButton->raise();
         adminTimerTotal->raise();
         label_3->raise();
-        adminOffBlock->raise();
-        skinContact->raise();
+        skinContactOn->raise();
+        label_4->raise();
+        skinContactOff->raise();
         offBlock->raise();
+        label_9->raise();
+        waveForm->raise();
+        adminOffBlock->raise();
 
         retranslateUi(MainWindow);
 
@@ -267,9 +282,11 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">20:00</p></body></html>", nullptr));
-        resetButton->setText(QApplication::translate("MainWindow", "Reset", nullptr));
         label_3->setText(QApplication::translate("MainWindow", "Timer total", nullptr));
-        skinContact->setText(QApplication::translate("MainWindow", "SKIN CONTACT", nullptr));
+        skinContactOn->setText(QApplication::translate("MainWindow", "ON", nullptr));
+        label_4->setText(QApplication::translate("MainWindow", "Skin contact: ", nullptr));
+        skinContactOff->setText(QApplication::translate("MainWindow", "OFF", nullptr));
+        label_9->setText(QApplication::translate("MainWindow", "Wave form", nullptr));
     } // retranslateUi
 
 };

@@ -42,6 +42,5 @@ private slots:
     void adminChangeCurrent(int curr);
     void adminChangeFreq(int freq);
     void adminChangeTimerTotal(int total);
-    void reset();
 };
 #endif // MAINWINDOW_H
