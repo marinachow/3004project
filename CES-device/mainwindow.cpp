@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
+    ui->skinContact->hide();
 
     //initialize variables
     time = 20;
@@ -181,14 +182,17 @@ void MainWindow::applyToSkin(int app) {
         dc = 0;
         running = true;
         onSkin = true;
+        ui->skinContact->show();
         timer->start(1000);
     }
     else if(app && running){
         onSkin = true;
+        ui->skinContact->show();
         dc = 0;
     }
     else{
         onSkin = false;
+        ui->skinContact->hide();
     }
 }
 
