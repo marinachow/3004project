@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     clock = new Clock();
     timer = new QTimer(this);
+      timer2 = new QTimer(this);
     running = false;
 
     //initialize decive to off
@@ -23,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     intensity = 0;
     onSkin = false;
     dc = 0;
+
+    waveform = 0;
+    frequency = 0;
 
     //populate drop down menus
     ui->skin->insertItem(0,"FALSE");
@@ -56,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->adminFreq, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeFreq(int)));
     connect(ui->adminTimerTotal, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeTimerTotal(int)));
     connect(timer, SIGNAL(timeout()), this, SLOT (doCountDownTick()));
+    connect(ui->waveForm, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeWaveform(int)));
+    connect(timer2, SIGNAL(timeout()), this, SLOT (drainBattery()));
 }
 
 MainWindow::~MainWindow() {
@@ -74,6 +80,9 @@ void MainWindow::turnOn() {
     if (intensity > 0)
         ui->lessButton->setEnabled(true);
     ui->lockButton->setEnabled(true);
+
+    timer2->start(7000);
+
 }
 
 void MainWindow::turnOff() {
@@ -146,6 +155,7 @@ void MainWindow::moreIntense() {
 }
 
 void MainWindow::doCountDownTick(){
+
     clock->countdown();
     QTime timeDisplayVal(0, clock->getMinutes(), clock->getSeconds());
     ui->timeLeft->setPlainText(timeDisplayVal.toString("mm:ss"));
@@ -235,8 +245,19 @@ void MainWindow::adminChangeCurrent(int curr) {
     }
 }
 
-void MainWindow::adminChangeFreq(int freq) {
 
+
+void MainWindow::adminChangeFreq(int freq) {
+    if(freq == 0){
+        //0.55hz
+       frequency = 0 ;
+    }else if( freq == 1){
+        //77hz
+       frequency = 1 ;
+    }else{
+        //100hz
+       frequency= 2 ;
+    }
 }
 
 void MainWindow::adminChangeTimerTotal(int total) {
@@ -257,4 +278,29 @@ void MainWindow::adminChangeTimerTotal(int total) {
         clock->setTime(time);
     }
 }
+
+
+void MainWindow::adminChangeWaveform(int wave) {
+    if(wave == 0){
+        //Alpha
+       wave = 0 ;
+    }else if( wave == 1){
+        //Beta
+       wave= 1 ;
+    }else{
+        //Gamma
+       wave= 2 ;
+    }
+}
+
+void MainWindow::drainBattery(){
+
+    if(intensity==0){
+        adminChangeBattery(ui->battery->value()-1);
+    }else{
+        adminChangeBattery(ui->battery->value()-3);
+
+    }
+}
+
 
