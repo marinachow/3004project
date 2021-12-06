@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
+    timer = new QTimer(this);
 
     //initialize decive to off
     ui->offButton->setEnabled(false);
@@ -12,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
+
 
     //initialize variables
     time = 20;
@@ -35,17 +37,23 @@ MainWindow::MainWindow(QWidget *parent)
     ui->adminTimerTotal->insertItem(2,"60");
 
     //slots
+    connect(timer,SIGNAL(timeout()),this,SLOT (useDevice()));
     connect(ui->onButton, SIGNAL(released()), this, SLOT (turnOn()));
     connect(ui->offButton, SIGNAL(released()), this, SLOT (turnOff()));
     connect(ui->changeTimeButton, SIGNAL(released()), this, SLOT (changeTime()));
     connect(ui->lessButton, SIGNAL(released()), this, SLOT (lessIntense()));
     connect(ui->moreButton, SIGNAL(released()), this, SLOT (moreIntense()));
+
+//    connect(ui->lessButton, SIGNAL(released()), this, SLOT (applyToSkin(int)));
+//    connect(ui->moreButton, SIGNAL(released()), this, SLOT (applyToSkin(int)));
+
     connect(ui->adminBattery, SIGNAL(valueChanged(int)), this, SLOT (adminChangeBattery(int)));
     connect(ui->skin, SIGNAL(currentIndexChanged(int)), this, SLOT (applyToSkin(int)));
     connect(ui->adminCurrent, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeCurrent(int)));
     connect(ui->adminFreq, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeFreq(int)));
     connect(ui->adminTimerTotal, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeTimerTotal(int)));
     connect(ui->resetButton, SIGNAL(released()), this, SLOT (reset()));
+
 }
 
 MainWindow::~MainWindow() {
@@ -63,6 +71,7 @@ void MainWindow::turnOn() {
     if (intensity > 0)
         ui->lessButton->setEnabled(true);
     ui->lockButton->setEnabled(true);
+
 }
 
 void MainWindow::turnOff() {
@@ -100,16 +109,23 @@ void MainWindow::lessIntense() {
     ui->adminCurrent->setCurrentIndex(intensity);
     if (intensity == 0) {
         ui->intensity->setValue(0);
-        ui->lessButton->setEnabled(false);
+
     } else if (intensity == 1) {
         ui->intensity->setValue(20);
+
     } else if (intensity == 2) {
         ui->intensity->setValue(40);
+
     } else if (intensity == 3) {
         ui->intensity->setValue(60);
+
     } else if (intensity == 4) {
         ui->intensity->setValue(80);
         ui->moreButton->setEnabled(true);
+    }
+
+    if(intensity >1 & ui->skin->currentIndex() == 1){
+        applyToSkin(1);
     }
 }
 
@@ -119,23 +135,31 @@ void MainWindow::moreIntense() {
     if (intensity == 1) {
         ui->intensity->setValue(20);
         ui->lessButton->setEnabled(true);
+
     } else if (intensity == 2) {
         ui->intensity->setValue(40);
+
     } else if (intensity == 3) {
         ui->intensity->setValue(60);
+
     } else if (intensity == 4) {
         ui->intensity->setValue(80);
+
     } else if (intensity == 5) {
         ui->intensity->setValue(100);
         ui->moreButton->setEnabled(false);
+
+    }
+    if(intensity > 1 & ui->skin->currentIndex() == 1){
+        applyToSkin(1);
     }
 }
 
 void MainWindow::adminChangeBattery(int batt) {
     ui->battery->setValue(batt);
-    if (batt == 5)
+    if (batt <= 5 )
         qInfo("Warning low battery: 5%");
-    else if (batt == 2) {
+    else if (batt <= 2) {
         qInfo("Battery dead... Shutting down");
         ui->offBlock->show();
         ui->adminOffBlock->show();
@@ -149,7 +173,13 @@ void MainWindow::adminChangeBattery(int batt) {
 }
 
 void MainWindow::applyToSkin(int app) {
+    if(app==1){
+        timer->start(1000);
 
+    }else{
+        qInfo("Lost contact with skin, please reapply");
+        timer->stop();
+    }
 }
 
 void MainWindow::adminChangeCurrent(int curr) {
@@ -207,6 +237,44 @@ void MainWindow::adminChangeTimerTotal(int total) {
 
 }
 
-void MainWindow::reset() {
+void MainWindow::useDevice(){
 
+    if(intensity==0){
+        qInfo("Increase intensity to start the process.");
+        timer->stop();
+        return;
+    }
+
+    if(intensity==1){
+        adminChangeBattery(ui->battery->value()-1);
+
+    }else if(intensity==2){
+        adminChangeBattery(ui->battery->value()-2);
+
+    }else if(intensity==3){
+        adminChangeBattery(ui->battery->value()-3);
+
+    }else if(intensity==4){
+        adminChangeBattery(ui->battery->value()-4);
+
+    }else if(intensity==5){
+        adminChangeBattery(ui->battery->value()-5);
+
+    }
+
+    qInfo("Treatment running");
+    time -= 5;
+    QString newTime = QString::number(time);
+    ui->timeLeft->setPlainText(newTime + ":00");
+
+    if(time<=0){
+        timer->stop();
+    }
+
+
+}
+
+
+void MainWindow::reset() {
+    ui->time
 }
