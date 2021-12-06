@@ -71,6 +71,7 @@ void MainWindow::turnOn() {
     if (intensity > 0)
         ui->lessButton->setEnabled(true);
     ui->lockButton->setEnabled(true);
+    timer->start(7000);
 
 }
 
@@ -277,5 +278,5 @@ void MainWindow::useDevice(){
 
 
 void MainWindow::reset() {
-    ui->time
+
 }
