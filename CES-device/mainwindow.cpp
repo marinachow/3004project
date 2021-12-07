@@ -205,6 +205,7 @@ void MainWindow::adminChangeBattery(int batt) {
         ui->recordButton->setEnabled(false);
         ui->historyButton->setEnabled(false);
         ui->lockButton->setEnabled(false);
+        timer2->stop();
     }
 }
 
