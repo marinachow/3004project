@@ -34,6 +34,7 @@ private:
     int waveform;
     int frequency;
 
+
 private slots:
     void turnOn();
     void turnOff();
