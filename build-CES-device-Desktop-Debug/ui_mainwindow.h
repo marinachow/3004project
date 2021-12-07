@@ -65,6 +65,10 @@ public:
     QLabel *skinContactOff;
     QLabel *label_9;
     QComboBox *waveForm;
+    QPushButton *recordButton;
+    QPushButton *historyButton;
+    QTextBrowser *displayHistory;
+    QPushButton *backButton;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -80,7 +84,7 @@ public:
         graphicsView->setStyleSheet(QString::fromUtf8("background-color: rgba(181, 185, 190);"));
         graphicsView_2 = new QGraphicsView(cesWidget);
         graphicsView_2->setObjectName(QString::fromUtf8("graphicsView_2"));
-        graphicsView_2->setGeometry(QRect(70, 60, 231, 331));
+        graphicsView_2->setGeometry(QRect(70, 60, 231, 351));
         graphicsView_2->setStyleSheet(QString::fromUtf8("background-color: rgb(46, 52, 54);"));
         graphicsView_3 = new QGraphicsView(cesWidget);
         graphicsView_3->setObjectName(QString::fromUtf8("graphicsView_3"));
@@ -118,10 +122,10 @@ public:
         moreButton->setGeometry(QRect(190, 320, 91, 25));
         lockButton = new QPushButton(cesWidget);
         lockButton->setObjectName(QString::fromUtf8("lockButton"));
-        lockButton->setGeometry(QRect(150, 350, 61, 25));
+        lockButton->setGeometry(QRect(150, 380, 61, 25));
         label_5 = new QLabel(cesWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(130, 410, 91, 17));
+        label_5->setGeometry(QRect(130, 420, 91, 17));
         QFont font;
         font.setFamily(QString::fromUtf8("Noto Sans Adlam"));
         font.setBold(true);
@@ -133,13 +137,13 @@ public:
         label_6->setFont(font);
         label_7 = new QLabel(cesWidget);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(370, 60, 91, 17));
+        label_7->setGeometry(QRect(380, 60, 81, 17));
         label_8 = new QLabel(cesWidget);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(370, 90, 91, 17));
+        label_8->setGeometry(QRect(380, 90, 81, 17));
         adminBattery = new QSpinBox(cesWidget);
         adminBattery->setObjectName(QString::fromUtf8("adminBattery"));
-        adminBattery->setGeometry(QRect(460, 50, 61, 26));
+        adminBattery->setGeometry(QRect(460, 60, 61, 26));
         adminBattery->setMaximum(100);
         adminBattery->setValue(100);
         skin = new QComboBox(cesWidget);
@@ -156,16 +160,16 @@ public:
         offBlock->setGeometry(QRect(90, 70, 191, 211));
         label = new QLabel(cesWidget);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(370, 130, 51, 17));
+        label->setGeometry(QRect(400, 120, 51, 17));
         label_2 = new QLabel(cesWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(370, 160, 61, 17));
+        label_2->setGeometry(QRect(390, 150, 61, 17));
         adminCurrent = new QComboBox(cesWidget);
         adminCurrent->setObjectName(QString::fromUtf8("adminCurrent"));
-        adminCurrent->setGeometry(QRect(420, 120, 81, 25));
+        adminCurrent->setGeometry(QRect(460, 120, 81, 25));
         adminFreq = new QComboBox(cesWidget);
         adminFreq->setObjectName(QString::fromUtf8("adminFreq"));
-        adminFreq->setGeometry(QRect(440, 160, 72, 25));
+        adminFreq->setGeometry(QRect(460, 150, 72, 25));
         adminOffBlock = new QGraphicsView(cesWidget);
         adminOffBlock->setObjectName(QString::fromUtf8("adminOffBlock"));
         adminOffBlock->setGeometry(QRect(360, 50, 256, 261));
@@ -184,10 +188,10 @@ public:
         timeLeft->setFrameShape(QFrame::NoFrame);
         adminTimerTotal = new QComboBox(cesWidget);
         adminTimerTotal->setObjectName(QString::fromUtf8("adminTimerTotal"));
-        adminTimerTotal->setGeometry(QRect(440, 230, 72, 25));
+        adminTimerTotal->setGeometry(QRect(460, 210, 72, 25));
         label_3 = new QLabel(cesWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(370, 230, 61, 17));
+        label_3->setGeometry(QRect(380, 210, 71, 20));
         skinContactOn = new QLabel(cesWidget);
         skinContactOn->setObjectName(QString::fromUtf8("skinContactOn"));
         skinContactOn->setGeometry(QRect(180, 70, 31, 20));
@@ -199,10 +203,22 @@ public:
         skinContactOff->setGeometry(QRect(180, 70, 54, 17));
         label_9 = new QLabel(cesWidget);
         label_9->setObjectName(QString::fromUtf8("label_9"));
-        label_9->setGeometry(QRect(370, 190, 61, 17));
+        label_9->setGeometry(QRect(380, 180, 71, 20));
         waveForm = new QComboBox(cesWidget);
         waveForm->setObjectName(QString::fromUtf8("waveForm"));
-        waveForm->setGeometry(QRect(440, 190, 72, 25));
+        waveForm->setGeometry(QRect(460, 180, 72, 25));
+        recordButton = new QPushButton(cesWidget);
+        recordButton->setObjectName(QString::fromUtf8("recordButton"));
+        recordButton->setGeometry(QRect(90, 350, 51, 25));
+        historyButton = new QPushButton(cesWidget);
+        historyButton->setObjectName(QString::fromUtf8("historyButton"));
+        historyButton->setGeometry(QRect(150, 350, 80, 25));
+        displayHistory = new QTextBrowser(cesWidget);
+        displayHistory->setObjectName(QString::fromUtf8("displayHistory"));
+        displayHistory->setGeometry(QRect(90, 70, 191, 211));
+        backButton = new QPushButton(cesWidget);
+        backButton->setObjectName(QString::fromUtf8("backButton"));
+        backButton->setGeometry(QRect(240, 350, 41, 25));
         MainWindow->setCentralWidget(cesWidget);
         graphicsView->raise();
         graphicsView_2->raise();
@@ -241,6 +257,10 @@ public:
         label_9->raise();
         waveForm->raise();
         adminOffBlock->raise();
+        recordButton->raise();
+        historyButton->raise();
+        displayHistory->raise();
+        backButton->raise();
 
         retranslateUi(MainWindow);
 
@@ -282,11 +302,14 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Noto Sans'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">20:00</p></body></html>", nullptr));
-        label_3->setText(QApplication::translate("MainWindow", "Timer total", nullptr));
+        label_3->setText(QApplication::translate("MainWindow", "Timer Total", nullptr));
         skinContactOn->setText(QApplication::translate("MainWindow", "ON", nullptr));
         label_4->setText(QApplication::translate("MainWindow", "Skin contact: ", nullptr));
         skinContactOff->setText(QApplication::translate("MainWindow", "OFF", nullptr));
-        label_9->setText(QApplication::translate("MainWindow", "Wave form", nullptr));
+        label_9->setText(QApplication::translate("MainWindow", "Wave Form", nullptr));
+        recordButton->setText(QApplication::translate("MainWindow", "Record", nullptr));
+        historyButton->setText(QApplication::translate("MainWindow", "View history", nullptr));
+        backButton->setText(QApplication::translate("MainWindow", "Back", nullptr));
     } // retranslateUi
 
 };

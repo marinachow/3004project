@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     clock = new Clock();
     timer = new QTimer(this);
-      timer2 = new QTimer(this);
+    timer2 = new QTimer(this);
     running = false;
 
     //initialize decive to off
@@ -16,8 +16,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->changeTimeButton->setEnabled(false);
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
+    ui->recordButton->setEnabled(false);
+    ui->historyButton->setEnabled(false);
+    ui->backButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
     ui->skinContactOn->hide();
+    ui->displayHistory->hide();
 
     //initialize variables
     time = 20;
@@ -62,11 +66,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, SIGNAL(timeout()), this, SLOT (doCountDownTick()));
     connect(ui->waveForm, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeWaveform(int)));
     connect(timer2, SIGNAL(timeout()), this, SLOT (drainBattery()));
+    connect(ui->recordButton, SIGNAL(released()), this, SLOT (makeRecord()));
+    connect(ui->historyButton, SIGNAL(released()), this, SLOT (makeRecordList()));
+    connect(ui->backButton, SIGNAL(released()), this, SLOT (goBack()));
 }
 
 MainWindow::~MainWindow() {
     delete ui;
     delete clock;
+    deleteRecords();
 }
 
 void MainWindow::turnOn() {
@@ -77,8 +85,11 @@ void MainWindow::turnOn() {
     ui->changeTimeButton->setEnabled(true);
     if (intensity < 5)
         ui->moreButton->setEnabled(true);
-    if (intensity > 0)
+    if (intensity > 0) {
         ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
+    }
     ui->lockButton->setEnabled(true);
 
     timer2->start(7000);
@@ -93,6 +104,8 @@ void MainWindow::turnOff() {
     ui->changeTimeButton->setEnabled(false);
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
+    ui->recordButton->setEnabled(false);
+    ui->historyButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
 }
 
@@ -124,6 +137,8 @@ void MainWindow::lessIntense() {
     if (intensity == 0) {
         ui->intensity->setValue(0);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
     } else if (intensity == 1) {
         ui->intensity->setValue(20);
     } else if (intensity == 2) {
@@ -142,6 +157,8 @@ void MainWindow::moreIntense() {
     if (intensity == 1) {
         ui->intensity->setValue(20);
         ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
     } else if (intensity == 2) {
         ui->intensity->setValue(40);
     } else if (intensity == 3) {
@@ -185,6 +202,8 @@ void MainWindow::adminChangeBattery(int batt) {
         ui->changeTimeButton->setEnabled(false);
         ui->moreButton->setEnabled(false);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
         ui->lockButton->setEnabled(false);
     }
 }
@@ -216,11 +235,16 @@ void MainWindow::adminChangeCurrent(int curr) {
     if (curr == 0) {
         ui->intensity->setValue(0);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
     }
     if (curr < 5)
         ui->moreButton->setEnabled(true);
-    if (curr > 0)
+    if (curr > 0) {
         ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
+    }
     if (curr == 1)
         ui->intensity->setValue(20);
     else if (curr == 2)
@@ -240,6 +264,8 @@ void MainWindow::adminChangeCurrent(int curr) {
         ui->changeTimeButton->setEnabled(false);
         ui->moreButton->setEnabled(false);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
         ui->lockButton->setEnabled(false);
         qInfo("Permanently disabled due to current exceeding 700μA");
     }
@@ -283,23 +309,23 @@ void MainWindow::adminChangeTimerTotal(int total) {
 void MainWindow::adminChangeWaveform(int wave) {
     if(wave == 0){
         //Alpha
-       wave = 0 ;
+       waveform = 0 ;
     }else if( wave == 1){
         //Beta
-       wave= 1 ;
+       waveform= 1 ;
     }else{
         //Gamma
-       wave= 2 ;
+       waveform= 2 ;
     }
 }
 
 void MainWindow::drainBattery(){
-    
-    if(intensity==0){
+    if(!running){
         adminChangeBattery(ui->battery->value()-1);
-    }else if (intensity > 0 & onSkin == true){
+        ui->adminBattery->setValue(ui->battery->value());
+    }else{
         adminChangeBattery(ui->battery->value()-3);
-
+        ui->adminBattery->setValue(ui->battery->value());
     }
 }
 
@@ -309,7 +335,7 @@ void MainWindow::makeRecord(){
     QString fq = "";
 
     if(frequency == 0){
-       fq = "0.55Hz" ;
+       fq = "0.5Hz" ;
     }else if( frequency == 1){
        fq = "77Hz" ;
     }else if(frequency == 2){
@@ -331,9 +357,18 @@ void MainWindow::makeRecord(){
 //Clear the old list then fill the QStringList with the contents of recordings
 void MainWindow::makeRecordList(){
     allRecordings.clear();
+    ui->displayHistory->setPlainText("");
     for (int i = 0; i < recordings.size(); i++) {
        allRecordings += recordings[i]->toString();
+       ui->displayHistory->append(allRecordings.at(i));
     }
+    ui->backButton->setEnabled(true);
+    ui->displayHistory->show();
+}
+
+void MainWindow::goBack() {
+    ui->displayHistory->hide();
+    ui->backButton->setEnabled(false);
 }
 
 //Delete everything in the list and vector

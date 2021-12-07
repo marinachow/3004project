@@ -55,5 +55,6 @@ private slots:
     void makeRecord();
     void makeRecordList();
     void deleteRecords();
+    void goBack();
 };
 #endif // MAINWINDOW_H
