@@ -294,10 +294,10 @@ void MainWindow::adminChangeWaveform(int wave) {
 }
 
 void MainWindow::drainBattery(){
-
+    
     if(intensity==0){
         adminChangeBattery(ui->battery->value()-1);
-    }else{
+    }else if (intensity > 0 & onSkin == true){
         adminChangeBattery(ui->battery->value()-3);
 
     }
