@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[18];
-    char stringdata0[191];
+    QByteArrayData data[24];
+    char stringdata0[269];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,7 +48,13 @@ QT_MOC_LITERAL(13, 137, 4), // "curr"
 QT_MOC_LITERAL(14, 142, 15), // "adminChangeFreq"
 QT_MOC_LITERAL(15, 158, 4), // "freq"
 QT_MOC_LITERAL(16, 163, 21), // "adminChangeTimerTotal"
-QT_MOC_LITERAL(17, 185, 5) // "total"
+QT_MOC_LITERAL(17, 185, 5), // "total"
+QT_MOC_LITERAL(18, 191, 19), // "adminChangeWaveform"
+QT_MOC_LITERAL(19, 211, 4), // "wave"
+QT_MOC_LITERAL(20, 216, 12), // "drainBattery"
+QT_MOC_LITERAL(21, 229, 10), // "makeRecord"
+QT_MOC_LITERAL(22, 240, 14), // "makeRecordList"
+QT_MOC_LITERAL(23, 255, 13) // "deleteRecords"
 
     },
     "MainWindow\0doCountDownTick\0\0turnOn\0"
@@ -56,7 +62,9 @@ QT_MOC_LITERAL(17, 185, 5) // "total"
     "moreIntense\0adminChangeBattery\0batt\0"
     "applyToSkin\0app\0adminChangeCurrent\0"
     "curr\0adminChangeFreq\0freq\0"
-    "adminChangeTimerTotal\0total"
+    "adminChangeTimerTotal\0total\0"
+    "adminChangeWaveform\0wave\0drainBattery\0"
+    "makeRecord\0makeRecordList\0deleteRecords"
 };
 #undef QT_MOC_LITERAL
 
@@ -66,7 +74,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      16,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -74,17 +82,22 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x0a /* Public */,
-       3,    0,   70,    2, 0x08 /* Private */,
-       4,    0,   71,    2, 0x08 /* Private */,
-       5,    0,   72,    2, 0x08 /* Private */,
-       6,    0,   73,    2, 0x08 /* Private */,
-       7,    0,   74,    2, 0x08 /* Private */,
-       8,    1,   75,    2, 0x08 /* Private */,
-      10,    1,   78,    2, 0x08 /* Private */,
-      12,    1,   81,    2, 0x08 /* Private */,
-      14,    1,   84,    2, 0x08 /* Private */,
-      16,    1,   87,    2, 0x08 /* Private */,
+       1,    0,   94,    2, 0x0a /* Public */,
+       3,    0,   95,    2, 0x08 /* Private */,
+       4,    0,   96,    2, 0x08 /* Private */,
+       5,    0,   97,    2, 0x08 /* Private */,
+       6,    0,   98,    2, 0x08 /* Private */,
+       7,    0,   99,    2, 0x08 /* Private */,
+       8,    1,  100,    2, 0x08 /* Private */,
+      10,    1,  103,    2, 0x08 /* Private */,
+      12,    1,  106,    2, 0x08 /* Private */,
+      14,    1,  109,    2, 0x08 /* Private */,
+      16,    1,  112,    2, 0x08 /* Private */,
+      18,    1,  115,    2, 0x08 /* Private */,
+      20,    0,  118,    2, 0x08 /* Private */,
+      21,    0,  119,    2, 0x08 /* Private */,
+      22,    0,  120,    2, 0x08 /* Private */,
+      23,    0,  121,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -98,6 +111,11 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Int,   13,
     QMetaType::Void, QMetaType::Int,   15,
     QMetaType::Void, QMetaType::Int,   17,
+    QMetaType::Void, QMetaType::Int,   19,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -119,6 +137,11 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->adminChangeCurrent((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 9: _t->adminChangeFreq((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 10: _t->adminChangeTimerTotal((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 11: _t->adminChangeWaveform((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 12: _t->drainBattery(); break;
+        case 13: _t->makeRecord(); break;
+        case 14: _t->makeRecordList(); break;
+        case 15: _t->deleteRecords(); break;
         default: ;
         }
     }
@@ -153,13 +176,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 16)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 16;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 16)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 16;
     }
     return _id;
 }

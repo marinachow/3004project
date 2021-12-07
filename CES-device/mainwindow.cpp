@@ -303,4 +303,43 @@ void MainWindow::drainBattery(){
     }
 }
 
+//Makes a new Record and saves it in a QVector of Records
+void MainWindow::makeRecord(){
+    QString wf = "";
+    QString fq = "";
+
+    if(frequency == 0){
+       fq = "0.55Hz" ;
+    }else if( frequency == 1){
+       fq = "77Hz" ;
+    }else if(frequency == 2){
+       fq = "100Hz" ;
+    }
+
+    if(waveform == 0){
+       wf = "Alpha" ;
+    }else if( waveform == 1){
+       wf = "Beta" ;
+    }else if(waveform == 2){
+       wf = "Gamma" ;
+    }
+
+    Record* newR = new Record(wf, fq, QDateTime::currentDateTime(), intensity, time);
+    recordings.push_back(newR);
+}
+
+//Clear the old list then fill the QStringList with the contents of recordings
+void MainWindow::makeRecordList(){
+    allRecordings.clear();
+    for (int i = 0; i < recordings.size(); i++) {
+       allRecordings += recordings[i]->toString();
+    }
+}
+
+//Delete everything in the list and vector
+void MainWindow::deleteRecords(){
+    recordings.clear();
+    allRecordings.clear();
+}
+
 

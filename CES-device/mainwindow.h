@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <clock.h>
 
+#include "record.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -27,6 +29,8 @@ private:
     int intensity;
     QTimer *timer;
     QTimer *timer2;
+    QVector<Record*> recordings;
+    QStringList allRecordings;
     Clock *clock;
     bool running;
     bool onSkin;
@@ -48,5 +52,8 @@ private slots:
     void adminChangeTimerTotal(int total);
     void adminChangeWaveform(int wave);
     void drainBattery();
+    void makeRecord();
+    void makeRecordList();
+    void deleteRecords();
 };
 #endif // MAINWINDOW_H
