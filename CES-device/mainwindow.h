@@ -22,12 +22,14 @@ public:
 
 public slots:
     void doCountDownTick();
+    void notInUse();
 
 private:
     Ui::MainWindow *ui;
     int time;
     int intensity;
     QTimer *timer;
+    QTimer *autoTimer;
     QTimer *timer2;
     QVector<Record*> recordings;
     QStringList allRecordings;
@@ -35,6 +37,8 @@ private:
     bool running;
     bool onSkin;
     int dc;
+    int elapsed;
+    int auto_off;
     int waveform;
     int frequency;
 
@@ -50,6 +54,7 @@ private slots:
     void adminChangeCurrent(int curr);
     void adminChangeFreq(int freq);
     void adminChangeTimerTotal(int total);
+    void resetClock();
     void adminChangeWaveform(int wave);
     void drainBattery();
     void makeRecord();
