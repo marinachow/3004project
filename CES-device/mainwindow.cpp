@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     clock = new Clock();
     timer = new QTimer(this);
+    autoTimer = new QTimer(this);
     running = false;
 
     //initialize decive to off
@@ -23,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     intensity = 0;
     onSkin = false;
     dc = 0;
+    auto_off = 0;
+    elapsed = 0;
 
     //populate drop down menus
     ui->skin->insertItem(0,"FALSE");
@@ -56,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->adminFreq, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeFreq(int)));
     connect(ui->adminTimerTotal, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeTimerTotal(int)));
     connect(timer, SIGNAL(timeout()), this, SLOT (doCountDownTick()));
+    connect(autoTimer, SIGNAL(timeout()), this, SLOT (notInUse()));
 }
 
 MainWindow::~MainWindow() {
@@ -74,6 +78,7 @@ void MainWindow::turnOn() {
     if (intensity > 0)
         ui->lessButton->setEnabled(true);
     ui->lockButton->setEnabled(true);
+    autoTimer->start(60000);
 }
 
 void MainWindow::turnOff() {
@@ -85,9 +90,13 @@ void MainWindow::turnOff() {
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
+    resetClock();
+    autoTimer->stop();
+    auto_off = 0;
 }
 
 void MainWindow::changeTime() {
+    auto_off = 0;
     if(!running){
         if (time == 20) {
             time = 40;
@@ -110,6 +119,7 @@ void MainWindow::changeTime() {
 }
 
 void MainWindow::lessIntense() {
+    auto_off = 0;
     intensity -= 1;
     ui->adminCurrent->setCurrentIndex(intensity);
     if (intensity == 0) {
@@ -128,6 +138,7 @@ void MainWindow::lessIntense() {
 }
 
 void MainWindow::moreIntense() {
+    auto_off = 0;
     intensity += 1;
     ui->adminCurrent->setCurrentIndex(intensity);
     if (intensity == 1) {
@@ -147,18 +158,36 @@ void MainWindow::moreIntense() {
 
 void MainWindow::doCountDownTick(){
     clock->countdown();
+    elapsed++;
     QTime timeDisplayVal(0, clock->getMinutes(), clock->getSeconds());
     ui->timeLeft->setPlainText(timeDisplayVal.toString("mm:ss"));
     if(!onSkin){
         dc++;
     }
     if(clock->isFinished() || dc >= 5){
-        timer->stop();
-        clock->setTime(time);
-        running = false;
-        QTime timeDisplayRset(0, clock->getMinutes(), clock->getSeconds());
-        ui->timeLeft->setPlainText(timeDisplayRset.toString("mm:ss"));
-        dc = 0;
+        resetClock();
+    }
+}
+
+void MainWindow::resetClock(){
+    timer->stop();
+    clock->setTime(time);
+    running = false;
+    QTime timeDisplayRset(0, clock->getMinutes(), clock->getSeconds());
+    ui->timeLeft->setPlainText(timeDisplayRset.toString("mm:ss"));
+    dc = 0;
+    elapsed = 0;
+    auto_off = 0;
+}
+
+void MainWindow::notInUse(){
+    if(!running){
+        auto_off++;
+        if(auto_off >= 30){
+            turnOff();
+        }
+    }else{
+        auto_off = 0;
     }
 }
 
