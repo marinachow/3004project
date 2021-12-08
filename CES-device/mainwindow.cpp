@@ -321,10 +321,10 @@ void MainWindow::adminChangeWaveform(int wave) {
 
 void MainWindow::drainBattery(){
     if(!running){
-        adminChangeBattery(ui->battery->value()-1);
+        ui->battery->setValue(ui->battery->value()-1);
         ui->adminBattery->setValue(ui->battery->value());
     }else{
-        adminChangeBattery(ui->battery->value()-3);
+        ui->battery->setValue(ui->battery->value()-3);
         ui->adminBattery->setValue(ui->battery->value());
     }
 }
