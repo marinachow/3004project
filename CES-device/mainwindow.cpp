@@ -210,7 +210,7 @@ void MainWindow::notInUse(){
         auto_off++;
         if(auto_off >= 30){
             turnOff();
-            qInfo("30 min auto-off")
+            qInfo("30 min auto-off");
         }
     }else{
         auto_off = 0;
