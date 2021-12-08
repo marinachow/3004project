@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     clock = new Clock();
     timer = new QTimer(this);
     autoTimer = new QTimer(this);
+    timer2 = new QTimer(this);
     running = false;
 
     //initialize decive to off
@@ -16,8 +17,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->changeTimeButton->setEnabled(false);
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
+    ui->recordButton->setEnabled(false);
+    ui->historyButton->setEnabled(false);
+    ui->backButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
     ui->skinContactOn->hide();
+    ui->displayHistory->hide();
 
     //initialize variables
     time = 20;
@@ -26,6 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
     dc = 0;
     auto_off = 0;
     elapsed = 0;
+
+    waveform = 0;
+    frequency = 0;
 
     //populate drop down menus
     ui->skin->insertItem(0,"FALSE");
@@ -60,11 +68,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->adminTimerTotal, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeTimerTotal(int)));
     connect(timer, SIGNAL(timeout()), this, SLOT (doCountDownTick()));
     connect(autoTimer, SIGNAL(timeout()), this, SLOT (notInUse()));
+    connect(ui->waveForm, SIGNAL(currentIndexChanged(int)), this, SLOT (adminChangeWaveform(int)));
+    connect(timer2, SIGNAL(timeout()), this, SLOT (drainBattery()));
+    connect(ui->recordButton, SIGNAL(released()), this, SLOT (makeRecord()));
+    connect(ui->historyButton, SIGNAL(released()), this, SLOT (makeRecordList()));
+    connect(ui->backButton, SIGNAL(released()), this, SLOT (goBack()));
 }
 
 MainWindow::~MainWindow() {
     delete ui;
     delete clock;
+    deleteRecords();
 }
 
 void MainWindow::turnOn() {
@@ -75,10 +89,14 @@ void MainWindow::turnOn() {
     ui->changeTimeButton->setEnabled(true);
     if (intensity < 5)
         ui->moreButton->setEnabled(true);
-    if (intensity > 0)
+    if (intensity > 0) {
         ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
+    }
     ui->lockButton->setEnabled(true);
     autoTimer->start(60000);
+    timer2->start(7000);
 }
 
 void MainWindow::turnOff() {
@@ -89,6 +107,8 @@ void MainWindow::turnOff() {
     ui->changeTimeButton->setEnabled(false);
     ui->moreButton->setEnabled(false);
     ui->lessButton->setEnabled(false);
+    ui->recordButton->setEnabled(false);
+    ui->historyButton->setEnabled(false);
     ui->lockButton->setEnabled(false);
     resetClock();
     autoTimer->stop();
@@ -125,6 +145,8 @@ void MainWindow::lessIntense() {
     if (intensity == 0) {
         ui->intensity->setValue(0);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
     } else if (intensity == 1) {
         ui->intensity->setValue(20);
     } else if (intensity == 2) {
@@ -144,6 +166,8 @@ void MainWindow::moreIntense() {
     if (intensity == 1) {
         ui->intensity->setValue(20);
         ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
     } else if (intensity == 2) {
         ui->intensity->setValue(40);
     } else if (intensity == 3) {
@@ -157,6 +181,7 @@ void MainWindow::moreIntense() {
 }
 
 void MainWindow::doCountDownTick(){
+
     clock->countdown();
     elapsed++;
     QTime timeDisplayVal(0, clock->getMinutes(), clock->getSeconds());
@@ -204,6 +229,8 @@ void MainWindow::adminChangeBattery(int batt) {
         ui->changeTimeButton->setEnabled(false);
         ui->moreButton->setEnabled(false);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
         ui->lockButton->setEnabled(false);
     }
 }
@@ -235,11 +262,16 @@ void MainWindow::adminChangeCurrent(int curr) {
     if (curr == 0) {
         ui->intensity->setValue(0);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
     }
     if (curr < 5)
         ui->moreButton->setEnabled(true);
-    if (curr > 0)
+    if (curr > 0) {
         ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
+    }
     if (curr == 1)
         ui->intensity->setValue(20);
     else if (curr == 2)
@@ -259,13 +291,26 @@ void MainWindow::adminChangeCurrent(int curr) {
         ui->changeTimeButton->setEnabled(false);
         ui->moreButton->setEnabled(false);
         ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
         ui->lockButton->setEnabled(false);
         qInfo("Permanently disabled due to current exceeding 700μA");
     }
 }
 
-void MainWindow::adminChangeFreq(int freq) {
 
+
+void MainWindow::adminChangeFreq(int freq) {
+    if(freq == 0){
+        //0.55hz
+       frequency = 0 ;
+    }else if( freq == 1){
+        //77hz
+       frequency = 1 ;
+    }else{
+        //100hz
+       frequency= 2 ;
+    }
 }
 
 void MainWindow::adminChangeTimerTotal(int total) {
@@ -286,4 +331,77 @@ void MainWindow::adminChangeTimerTotal(int total) {
         clock->setTime(time);
     }
 }
+
+
+void MainWindow::adminChangeWaveform(int wave) {
+    if(wave == 0){
+        //Alpha
+       waveform = 0 ;
+    }else if( wave == 1){
+        //Beta
+       waveform= 1 ;
+    }else{
+        //Gamma
+       waveform= 2 ;
+    }
+}
+
+void MainWindow::drainBattery(){
+    if(!running){
+        adminChangeBattery(ui->battery->value()-1);
+        ui->adminBattery->setValue(ui->battery->value());
+    }else{
+        adminChangeBattery(ui->battery->value()-3);
+        ui->adminBattery->setValue(ui->battery->value());
+    }
+}
+
+//Makes a new Record and saves it in a QVector of Records
+void MainWindow::makeRecord(){
+    QString wf = "";
+    QString fq = "";
+
+    if(frequency == 0){
+       fq = "0.5Hz" ;
+    }else if( frequency == 1){
+       fq = "77Hz" ;
+    }else if(frequency == 2){
+       fq = "100Hz" ;
+    }
+
+    if(waveform == 0){
+       wf = "Alpha" ;
+    }else if( waveform == 1){
+       wf = "Beta" ;
+    }else if(waveform == 2){
+       wf = "Gamma" ;
+    }
+
+    Record* newR = new Record(wf, fq, QDateTime::currentDateTime(), intensity, time);
+    recordings.push_back(newR);
+}
+
+//Clear the old list then fill the QStringList with the contents of recordings
+void MainWindow::makeRecordList(){
+    allRecordings.clear();
+    ui->displayHistory->setPlainText("");
+    for (int i = 0; i < recordings.size(); i++) {
+       allRecordings += recordings[i]->toString();
+       ui->displayHistory->append(allRecordings.at(i));
+    }
+    ui->backButton->setEnabled(true);
+    ui->displayHistory->show();
+}
+
+void MainWindow::goBack() {
+    ui->displayHistory->hide();
+    ui->backButton->setEnabled(false);
+}
+
+//Delete everything in the list and vector
+void MainWindow::deleteRecords(){
+    recordings.clear();
+    allRecordings.clear();
+}
+
 

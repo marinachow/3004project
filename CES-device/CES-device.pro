@@ -18,11 +18,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     clock.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    record.cpp
 
 HEADERS += \
     clock.h \
-    mainwindow.h \
+    mainwindow.h \ \
+    record.h
 
 FORMS += \
     mainwindow.ui
