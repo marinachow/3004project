@@ -20,16 +20,20 @@ public:
 
 public slots:
     void doCountDownTick();
+    void notInUse();
 
 private:
     Ui::MainWindow *ui;
     int time;
     int intensity;
     QTimer *timer;
+    QTimer *autoTimer;
     Clock *clock;
     bool running;
     bool onSkin;
     int dc;
+    int elapsed;
+    int auto_off;
 
 private slots:
     void turnOn();
@@ -42,5 +46,6 @@ private slots:
     void adminChangeCurrent(int curr);
     void adminChangeFreq(int freq);
     void adminChangeTimerTotal(int total);
+    void resetClock();
 };
 #endif // MAINWINDOW_H
