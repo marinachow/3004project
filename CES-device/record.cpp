@@ -11,7 +11,7 @@ Record::Record(const QString& waveform, const QString& frequency, const QDateTim
     }
 }
 
-
+//toString for the records
 QString Record::toString() {
     QString newString =
             startTime.toString("ddd h:mm ap") + "\n"
@@ -24,14 +24,9 @@ QString Record::toString() {
 }
 
 
-// getters
+// Get Methods
 QString Record::getWaveform() { return waveform; }
 QString Record::getFrequency() { return frequency; }
 QDateTime Record::getStartTime() { return startTime; }
 int Record::getPowerLevel() { return powerLevel; }
 int Record::getDuration() { return duration; }
-
-
-// setters
-void Record::setPowerLevel(int p) { powerLevel = p; }
-void Record::setDuration(int d) { duration = d; }

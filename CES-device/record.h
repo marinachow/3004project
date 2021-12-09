@@ -5,7 +5,7 @@
 #include <QDateTime>
 #include <QTime>
 
-/* Purpose of Class: To store information about a treatment in the database and in mainwindow
+/* Purpose of Class: To store information
  *
  * Data Members:
  * - QString waveform: a QString representation of a waveform
@@ -19,8 +19,6 @@ class Record {
 
 public:
     Record(const QString& waveform, const QString& frequency, const QDateTime& startTime, const int powerLevel, const int duration);
-    void setPowerLevel(int p);
-    void setDuration(int durationMS);
     QString toString();
     QString getWaveform();
     QString getFrequency();

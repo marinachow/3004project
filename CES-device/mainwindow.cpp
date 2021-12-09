@@ -1,11 +1,19 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
+
     ui->setupUi(this);
 
+    //initialize variables
+    time = 20;
+    intensity = 0;
+    onSkin = false;
+    dc = 0;
+    auto_off = 0;
+    elapsed = 0;
+    waveform = 0;
+    frequency = 0;
     clock = new Clock();
     timer = new QTimer(this);
     autoTimer = new QTimer(this);
@@ -23,16 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lockButton->setEnabled(false);
     ui->skinContactOn->hide();
     ui->displayHistory->hide();
-
-    //initialize variables
-    time = 20;
-    intensity = 0;
-    onSkin = false;
-    dc = 0;
-    auto_off = 0;
-    elapsed = 0;
-    waveform = 0;
-    frequency = 0;
 
     //populate drop down menus
     ui->skin->insertItem(0,"FALSE");
@@ -80,6 +78,7 @@ MainWindow::~MainWindow() {
     deleteRecords();
 }
 
+//Turns on the machine
 void MainWindow::turnOn() {
     ui->offBlock->hide();
     ui->adminOffBlock->hide();
@@ -99,6 +98,7 @@ void MainWindow::turnOn() {
 
 }
 
+//Turns off the machine
 void MainWindow::turnOff() {
     ui->offBlock->show();
     ui->adminOffBlock->show();
@@ -115,6 +115,7 @@ void MainWindow::turnOff() {
     auto_off = 0;
 }
 
+//Is in change of updating and maintaining the duration time
 void MainWindow::changeTime() {
     auto_off = 0;
     if(!running){
@@ -138,6 +139,7 @@ void MainWindow::changeTime() {
     }
 }
 
+//Changes the power level to one lower
 void MainWindow::lessIntense() {
     auto_off = 0;
     intensity -= 1;
@@ -159,6 +161,7 @@ void MainWindow::lessIntense() {
     }
 }
 
+//Changes the power level to one higher
 void MainWindow::moreIntense() {
     auto_off = 0;
     intensity += 1;
@@ -180,6 +183,7 @@ void MainWindow::moreIntense() {
     }
 }
 
+//Makes the clock count down
 void MainWindow::doCountDownTick(){
 
     clock->countdown();
@@ -194,6 +198,7 @@ void MainWindow::doCountDownTick(){
     }
 }
 
+//resets the clock to default values
 void MainWindow::resetClock(){
     timer->stop();
     clock->setTime(time);
@@ -205,6 +210,7 @@ void MainWindow::resetClock(){
     auto_off = 0;
 }
 
+//Turns off the machine after 30 minutes of being not used
 void MainWindow::notInUse(){
     if(!running){
         auto_off++;
@@ -217,25 +223,7 @@ void MainWindow::notInUse(){
     }
 }
 
-void MainWindow::adminChangeBattery(int batt) {
-    ui->battery->setValue(batt);
-    if (batt == 5)
-        qInfo("Warning low battery: 5%");
-    else if (batt == 2) {
-        qInfo("Battery dead... Shutting down");
-        ui->offBlock->show();
-        ui->adminOffBlock->show();
-        ui->offButton->setEnabled(false);
-        ui->onButton->setEnabled(false);
-        ui->changeTimeButton->setEnabled(false);
-        ui->moreButton->setEnabled(false);
-        ui->lessButton->setEnabled(false);
-        ui->recordButton->setEnabled(false);
-        ui->historyButton->setEnabled(false);
-        ui->lockButton->setEnabled(false);
-    }
-}
-
+//Simulates applying the machine to skin which starts the session
 void MainWindow::applyToSkin(int app) {
     if(app && !running){
         dc = 0;
@@ -258,95 +246,7 @@ void MainWindow::applyToSkin(int app) {
     }
 }
 
-void MainWindow::adminChangeCurrent(int curr) {
-    intensity = curr;
-    if (curr == 0) {
-        ui->intensity->setValue(0);
-        ui->lessButton->setEnabled(false);
-        ui->recordButton->setEnabled(false);
-        ui->historyButton->setEnabled(false);
-    }
-    if (curr < 5)
-        ui->moreButton->setEnabled(true);
-    if (curr > 0) {
-        ui->lessButton->setEnabled(true);
-        ui->recordButton->setEnabled(true);
-        ui->historyButton->setEnabled(true);
-    }
-    if (curr == 1)
-        ui->intensity->setValue(20);
-    else if (curr == 2)
-        ui->intensity->setValue(40);
-    else if (curr == 3)
-        ui->intensity->setValue(60);
-    else if (curr == 4)
-        ui->intensity->setValue(80);
-    else if (curr == 5) {
-        ui->intensity->setValue(100);
-        ui->moreButton->setEnabled(false);
-    } else if (curr == 6) {
-        ui->offBlock->show();
-        ui->adminOffBlock->show();
-        ui->offButton->setEnabled(false);
-        ui->onButton->setEnabled(false);
-        ui->changeTimeButton->setEnabled(false);
-        ui->moreButton->setEnabled(false);
-        ui->lessButton->setEnabled(false);
-        ui->recordButton->setEnabled(false);
-        ui->historyButton->setEnabled(false);
-        ui->lockButton->setEnabled(false);
-        qInfo("Permanently disabled due to current exceeding 700μA");
-    }
-}
-
-
-
-void MainWindow::adminChangeFreq(int freq) {
-    if(freq == 0){
-        //0.55hz
-       frequency = 0 ;
-    }else if( freq == 1){
-        //77hz
-       frequency = 1 ;
-    }else{
-        //100hz
-       frequency= 2 ;
-    }
-}
-
-void MainWindow::adminChangeTimerTotal(int total) {
-    if(!running){
-        if (total == 0) {
-            time = 20;
-            ui->timerTotal->setPlainText("20");
-            ui->timeLeft->setPlainText("20:00");
-        } else if (total == 1) {
-            time = 40;
-            ui->timerTotal->setPlainText("40");
-            ui->timeLeft->setPlainText("40:00");
-        } else {
-            time = 60;
-            ui->timerTotal->setPlainText("60");
-            ui->timeLeft->setPlainText("60:00");
-        }
-        clock->setTime(time);
-    }
-}
-
-
-void MainWindow::adminChangeWaveform(int wave) {
-    if(wave == 0){
-        //Alpha
-       waveform = 0 ;
-    }else if( wave == 1){
-        //Beta
-       waveform= 1 ;
-    }else{
-        //Gamma
-       waveform= 2 ;
-    }
-}
-
+//Drains the battery over time
 void MainWindow::drainBattery(){
     if(!running){
         ui->battery->setValue(ui->battery->value()-1);
@@ -394,15 +294,126 @@ void MainWindow::makeRecordList(){
     ui->displayHistory->show();
 }
 
+//Delete everything in the list and vector
+void MainWindow::deleteRecords(){
+    recordings.clear();
+    allRecordings.clear();
+}
+
+//Goes back from the records to the default screen
 void MainWindow::goBack() {
     ui->displayHistory->hide();
     ui->backButton->setEnabled(false);
 }
 
-//Delete everything in the list and vector
-void MainWindow::deleteRecords(){
-    recordings.clear();
-    allRecordings.clear();
+//Admin ability to change the battery value
+void MainWindow::adminChangeBattery(int batt) {
+    ui->battery->setValue(batt);
+    if (batt == 5)
+        qInfo("Warning low battery: 5%");
+    else if (batt == 2) {
+        qInfo("Battery dead... Shutting down");
+        ui->offBlock->show();
+        ui->adminOffBlock->show();
+        ui->offButton->setEnabled(false);
+        ui->onButton->setEnabled(false);
+        ui->changeTimeButton->setEnabled(false);
+        ui->moreButton->setEnabled(false);
+        ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
+        ui->lockButton->setEnabled(false);
+    }
+}
+
+//Admin ability to change the power level
+void MainWindow::adminChangeCurrent(int curr) {
+    intensity = curr;
+    if (curr == 0) {
+        ui->intensity->setValue(0);
+        ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
+    }
+    if (curr < 5)
+        ui->moreButton->setEnabled(true);
+    if (curr > 0) {
+        ui->lessButton->setEnabled(true);
+        ui->recordButton->setEnabled(true);
+        ui->historyButton->setEnabled(true);
+    }
+    if (curr == 1)
+        ui->intensity->setValue(20);
+    else if (curr == 2)
+        ui->intensity->setValue(40);
+    else if (curr == 3)
+        ui->intensity->setValue(60);
+    else if (curr == 4)
+        ui->intensity->setValue(80);
+    else if (curr == 5) {
+        ui->intensity->setValue(100);
+        ui->moreButton->setEnabled(false);
+    } else if (curr == 6) {
+        ui->offBlock->show();
+        ui->adminOffBlock->show();
+        ui->offButton->setEnabled(false);
+        ui->onButton->setEnabled(false);
+        ui->changeTimeButton->setEnabled(false);
+        ui->moreButton->setEnabled(false);
+        ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
+        ui->lockButton->setEnabled(false);
+        qInfo("Permanently disabled due to current exceeding 700μA");
+    }
+}
+
+//Admin ability to change the frequency
+void MainWindow::adminChangeFreq(int freq) {
+    if(freq == 0){
+        //0.55hz
+       frequency = 0 ;
+    }else if( freq == 1){
+        //77hz
+       frequency = 1 ;
+    }else{
+        //100hz
+       frequency= 2 ;
+    }
+}
+
+//Admin ability to change the duration
+void MainWindow::adminChangeTimerTotal(int total) {
+    if(!running){
+        if (total == 0) {
+            time = 20;
+            ui->timerTotal->setPlainText("20");
+            ui->timeLeft->setPlainText("20:00");
+        } else if (total == 1) {
+            time = 40;
+            ui->timerTotal->setPlainText("40");
+            ui->timeLeft->setPlainText("40:00");
+        } else {
+            time = 60;
+            ui->timerTotal->setPlainText("60");
+            ui->timeLeft->setPlainText("60:00");
+        }
+        clock->setTime(time);
+    }
+}
+
+//Admin ability to change the waveform
+void MainWindow::adminChangeWaveform(int wave) {
+    if(wave == 0){
+        //Alpha
+       waveform = 0 ;
+    }else if( wave == 1){
+        //Beta
+       waveform= 1 ;
+    }else{
+        //Gamma
+       waveform= 2 ;
+    }
 }
 
 

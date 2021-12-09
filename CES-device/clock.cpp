@@ -6,23 +6,18 @@ Clock::Clock(int mins)
 
 }
 
+//Sets the time on the clock
 void Clock::setTime(int mins){
     minutes = mins;
     seconds = 0;
 }
 
-int Clock::getMinutes(){
-    return minutes;
-}
-
-int Clock::getSeconds(){
-    return seconds;
-}
-
+//Is the clock finished boolean
 bool Clock::isFinished(){
     return (minutes == 0 && seconds == 0);
 }
 
+//Countsdown the clock
 void Clock::countdown(){
     if(!isFinished()){
         if(seconds == 0){
@@ -34,3 +29,7 @@ void Clock::countdown(){
         }
     }
 }
+
+//Get Methods
+int Clock::getMinutes(){return minutes;}
+int Clock::getSeconds(){return seconds;}

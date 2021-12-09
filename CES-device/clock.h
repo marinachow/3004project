@@ -1,6 +1,12 @@
 #ifndef CLOCK_H
 #define CLOCK_H
 
+/* Purpose of Class: It's a seconds and minutes clock
+ *
+ * Data Members:
+ * - int seconds: integer representation of the seconds
+ * - int minutes: integer representation of the minutes
+ */
 
 class Clock
 {
