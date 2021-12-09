@@ -94,7 +94,7 @@ void MainWindow::turnOn() {
     }
     ui->lockButton->setEnabled(true);
     autoTimer->start(60000);
-    timer2->start(7000);
+    timer2->start(180000);
 
 }
 
@@ -112,6 +112,7 @@ void MainWindow::turnOff() {
     ui->lockButton->setEnabled(false);
     resetClock();
     autoTimer->stop();
+    timer2->stop();
     auto_off = 0;
 }
 
@@ -208,6 +209,7 @@ void MainWindow::resetClock(){
     dc = 0;
     elapsed = 0;
     auto_off = 0;
+    timer2->setInterval(180000);
 }
 
 //Turns off the machine after 30 minutes of being not used
@@ -232,6 +234,7 @@ void MainWindow::applyToSkin(int app) {
         ui->skinContactOn->show();
         ui->skinContactOff->hide();
         timer->start(1000);
+        timer2->setInterval(60000);
     }
     else if(app && running){
         onSkin = true;
@@ -248,13 +251,24 @@ void MainWindow::applyToSkin(int app) {
 
 //Drains the battery over time
 void MainWindow::drainBattery(){
-    if(!running){
-        ui->battery->setValue(ui->battery->value()-1);
-        ui->adminBattery->setValue(ui->battery->value());
-    }else{
-        ui->battery->setValue(ui->battery->value()-3);
-        ui->adminBattery->setValue(ui->battery->value());
+    int batt = ui->battery->value() - 1;
+    ui->battery->setValue(batt);
+    ui->adminBattery->setValue(batt);
+    if (batt <= 2) {
+        qInfo("Battery dead... Shutting down");
+        ui->offBlock->show();
+        ui->adminOffBlock->show();
+        ui->offButton->setEnabled(false);
+        ui->onButton->setEnabled(false);
+        ui->changeTimeButton->setEnabled(false);
+        ui->moreButton->setEnabled(false);
+        ui->lessButton->setEnabled(false);
+        ui->recordButton->setEnabled(false);
+        ui->historyButton->setEnabled(false);
+        ui->lockButton->setEnabled(false);
     }
+    else if (batt <= 5)
+        qInfo("Warning low battery: 5%");
 }
 
 //Makes a new Record and saves it in a QVector of Records
