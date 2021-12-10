@@ -206,6 +206,7 @@ void MainWindow::resetClock(){
     running = false;
     QTime timeDisplayRset(0, clock->getMinutes(), clock->getSeconds());
     ui->timeLeft->setPlainText(timeDisplayRset.toString("mm:ss"));
+    makeRecord();
     dc = 0;
     elapsed = 0;
     auto_off = 0;
@@ -292,7 +293,7 @@ void MainWindow::makeRecord(){
        wf = "Gamma" ;
     }
 
-    Record* newR = new Record(wf, fq, QDateTime::currentDateTime(), intensity, time);
+    Record* newR = new Record(wf, fq, QDateTime::currentDateTime(), intensity, elapsed);
     recordings.push_back(newR);
 }
 
